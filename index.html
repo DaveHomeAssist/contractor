@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#1A1D21">
   <title>Summit Contracting — Licensed Home Contractor</title>
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon/favicon.svg">
       <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/favicon/apple-touch-icon.png" />
@@ -35,6 +36,14 @@
      onmouseout="this.style.color='rgba(255,255,255,0.4)'">&larr; DaveHomeAssist</a>
   <div id="loading"><div id="loading-spinner"></div><div id="loading-text">Loading...</div></div>
   <div id="root"></div>
+  <form name="quote" netlify netlify-honeypot="bot-field" hidden>
+    <input name="bot-field" />
+    <input name="name" />
+    <input name="phone" />
+    <input name="email" />
+    <input name="service" />
+    <textarea name="details"></textarea>
+  </form>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="/app.js"></script>

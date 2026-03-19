@@ -424,6 +424,8 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .mob-btn { flex: 1; padding: 14px; border-radius: var(--radius); font-weight: 700; font-size: 14px; cursor: pointer; text-align: center; text-decoration: none; font-family: var(--font-body); border: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .mob-call { background: var(--orange); color: white; }
 .mob-est { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.15); }
+.mob-btn:hover { opacity: 0.85; }
+.mob-btn:focus-visible { outline: 2px solid var(--orange-deep); outline-offset: 2px; }
 @media (max-width: 768px) { .mob-bar { display: block; } main { padding-bottom: 80px; } }
 
 /* ── HERO ── */
@@ -476,6 +478,7 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
 .svc-card { cursor: pointer; border-left: 4px solid var(--steel); }
 .svc-card:hover { border-left-color: var(--orange); }
+.svc-card:focus-visible, .proj-card:focus-visible { outline: 2px solid var(--orange-deep); outline-offset: 2px; }
 .svc-card .card-body { padding: 28px; }
 .svc-icon { font-size: 28px; margin-bottom: 12px; }
 .svc-title { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--charcoal); margin-bottom: 6px; text-transform: uppercase; }
@@ -534,6 +537,7 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
 .form-submit { width: 100%; padding: 14px; background: var(--orange); color: white; border: none; border-radius: var(--radius); font-weight: 700; font-size: 15px; cursor: pointer; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.04em; transition: var(--transition); margin-top: 8px; }
 .form-submit:hover { background: var(--orange-light); }
+.form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
 .form-success { text-align: center; padding: 48px 32px; }
 .form-success h3 { font-family: var(--font-display); font-size: 28px; color: var(--charcoal); margin: 16px 0 8px; }
 
@@ -567,7 +571,8 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
 .tag { font-size: 11px; padding: 4px 10px; border-radius: 3px; background: var(--concrete); color: var(--steel-deep); font-weight: 600; }
-.link-btn { background: none; border: none; color: var(--orange); font-weight: 700; cursor: pointer; font-family: var(--font-body); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; padding: 0; text-transform: uppercase; letter-spacing: 0.02em; }
+.link-btn { background: none; border: none; color: var(--orange); font-weight: 700; cursor: pointer; font-family: var(--font-body); font-size: 14px; text-decoration: underline; text-underline-offset: 3px; padding: 0; text-transform: uppercase; letter-spacing: 0.02em; transition: var(--transition); }
+.link-btn:hover, .link-btn:focus { color: var(--orange-deep); }
 .breadcrumb { font-size: 13px; color: var(--slate); margin-bottom: 8px; }
 .breadcrumb a { color: var(--orange); text-decoration: none; cursor: pointer; }
 .breadcrumb a:hover { text-decoration: underline; }
@@ -637,6 +642,7 @@ function FAQ({
     className: "faq-item"
   }, /*#__PURE__*/React.createElement("button", {
     className: "faq-q",
+    "aria-expanded": open === i,
     onClick: () => setOpen(open === i ? null : i)
   }, f.q, /*#__PURE__*/React.createElement("span", {
     className: `faq-arrow ${open === i ? "open" : ""}`
@@ -737,6 +743,26 @@ function ProjectCard({
 }
 function QuoteForm() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const formRef = useRef(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (sending) return;
+    setSending(true);
+    const data = new FormData(formRef.current);
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(data).toString()
+    }).then(response => {
+      if (!response.ok) throw new Error("Netlify form submit failed");
+      setSent(true);
+    }).catch(() => {
+      setSending(false);
+    });
+  }
+
   if (sent) return /*#__PURE__*/React.createElement("div", {
     className: "form-container"
   }, /*#__PURE__*/React.createElement("div", {
@@ -765,15 +791,25 @@ function QuoteForm() {
     className: "form-container"
   }, /*#__PURE__*/React.createElement("div", {
     className: "form-header"
-  }, /*#__PURE__*/React.createElement("h3", null, "Get Your Free Estimate"), /*#__PURE__*/React.createElement("p", null, "Tell us about your project \u2014 we respond within 24 hours.")), /*#__PURE__*/React.createElement("div", {
-    className: "form-body"
-  }, /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("h3", null, "Get Your Free Estimate"), /*#__PURE__*/React.createElement("p", null, "Tell us about your project \u2014 we respond within 24 hours.")), /*#__PURE__*/React.createElement("form", {
+    ref: formRef,
+    name: "quote",
+    method: "POST",
+    "data-netlify": "true",
+    "netlify-honeypot": "bot-field",
+    className: "form-body",
+    onSubmit: handleSubmit
+  }, /*#__PURE__*/React.createElement("input", { type: "hidden", name: "form-name", value: "quote" }),
+  /*#__PURE__*/React.createElement("input", { type: "hidden", name: "bot-field" }),
+  /*#__PURE__*/React.createElement("div", {
     className: "form-field"
   }, /*#__PURE__*/React.createElement("label", {
     className: "form-label"
   }, "Name *"), /*#__PURE__*/React.createElement("input", {
     className: "form-input",
-    placeholder: "Your full name"
+    name: "name",
+    placeholder: "Your full name",
+    required: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "form-row"
   }, /*#__PURE__*/React.createElement("div", {
@@ -782,14 +818,17 @@ function QuoteForm() {
     className: "form-label"
   }, "Phone *"), /*#__PURE__*/React.createElement("input", {
     className: "form-input",
+    name: "phone",
     type: "tel",
-    placeholder: "(555) 000-0000"
+    placeholder: "(555) 000-0000",
+    required: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "form-field"
   }, /*#__PURE__*/React.createElement("label", {
     className: "form-label"
   }, "Email"), /*#__PURE__*/React.createElement("input", {
     className: "form-input",
+    name: "email",
     type: "email",
     placeholder: "you@email.com"
   }))), /*#__PURE__*/React.createElement("div", {
@@ -798,6 +837,7 @@ function QuoteForm() {
     className: "form-label"
   }, "Service Needed"), /*#__PURE__*/React.createElement("select", {
     className: "form-select",
+    name: "service",
     defaultValue: ""
   }, [/*#__PURE__*/React.createElement("option", {
     key: "",
@@ -812,11 +852,13 @@ function QuoteForm() {
     className: "form-label"
   }, "Project Details"), /*#__PURE__*/React.createElement("textarea", {
     className: "form-textarea",
+    name: "details",
     placeholder: "Describe your project \u2014 what needs to be done, any concerns, timeline preferences\u2026"
   })), /*#__PURE__*/React.createElement("button", {
     className: "form-submit",
-    onClick: () => setSent(true)
-  }, "Request Free Estimate")));
+    type: "submit",
+    disabled: sending
+  }, sending ? "Sending\u2026" : "Request Free Estimate")));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1784,6 +1826,7 @@ function Header({
     className: "h-phone h-phone-desk"
   }, "\uD83D\uDCDE ", BIZ.phone), /*#__PURE__*/React.createElement("button", {
     className: "h-menu-btn",
+    "aria-label": "Toggle navigation menu",
     onClick: () => setOpen(!open)
   }, open ? "✕" : "☰"))));
 }
