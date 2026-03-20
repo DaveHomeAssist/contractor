@@ -16,7 +16,48 @@
       --nav-link-color: rgba(255,255,255,0.4);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: system-ui, sans-serif; }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg-dark);
+      color: #f3efe8;
+    }
+    .fallback-shell {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    @media (max-width: 768px) {
+      .fallback-shell { padding: 12px; }
+    }
+    .skip-link {
+      position: absolute; left: -9999px; top: auto;
+      padding: 8px 16px; background: #1a1a1a; color: #f0c66d;
+      border-radius: 4px; z-index: 1000; text-decoration: none;
+    }
+    .skip-link:focus { left: 10px; top: 10px; }
+    .fallback-header {
+      display: grid;
+      gap: 10px;
+      margin: 3rem 0 1rem;
+    }
+    .fallback-header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1.05;
+    }
+    .fallback-nav a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .fallback-nav a:hover,
+    .fallback-nav a:focus-visible {
+      text-decoration: underline;
+    }
+    .fallback-copy {
+      color: rgba(255,255,255,0.72);
+      line-height: 1.6;
+    }
     #loading { position: fixed; inset: 0; z-index: 9999; background: var(--bg-dark);
       display: flex; align-items: center; justify-content: center; flex-direction: column;
       transition: opacity 0.4s ease; }
@@ -35,13 +76,28 @@
       font-size: .7rem; letter-spacing: .04em;
       color: var(--nav-link-color); text-decoration: none; transition: color .15s;
     }
-    .back-link:hover { color: currentColor; }
+    .back-link:hover,
+    .back-link:focus-visible { color: var(--accent); text-decoration: underline; }
   </style>
 </head>
 <body>
+  <a href="#root" class="skip-link">Skip to content</a>
   <a href="https://davehomeassist.github.io/" class="back-link">&larr; DaveHomeAssist</a>
-  <div id="loading"><div id="loading-spinner"></div><div id="loading-text">Loading...</div></div>
-  <div id="root"></div>
+  <header class="fallback-shell fallback-header">
+    <h1>Summit Contracting</h1>
+    <nav class="fallback-nav" aria-label="Primary navigation">
+      <a href="https://davehomeassist.github.io/">Back to DaveHomeAssist</a>
+    </nav>
+    <p class="fallback-copy">Licensed home contractor services with a browser-based quote and lead capture flow.</p>
+  </header>
+  <main class="fallback-shell">
+    <div id="loading"><div id="loading-spinner"></div><div id="loading-text">Loading...</div></div>
+    <div id="root">
+      <noscript>
+        <p class="fallback-copy">JavaScript is required to use the full quote experience. You can still return to the portfolio from the navigation above.</p>
+      </noscript>
+    </div>
+  </main>
   <form name="quote" netlify netlify-honeypot="bot-field" hidden>
     <input name="bot-field" />
     <input name="name" />
