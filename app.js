@@ -383,6 +383,7 @@ const CSS = `
   --charcoal-mid: #2D3239;
   --slate: #5E666F;
   --mist: #A5ABB3;
+  --slate-light: #999;
   --success: #3D8B5E;
   --font-display: 'Bitter', Georgia, serif;
   --font-body: 'Source Sans 3', system-ui, sans-serif;
@@ -408,14 +409,15 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .h-nav { display: flex; gap: 2px; align-items: center; }
 .h-nav a, .h-nav button { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 4px; transition: var(--transition); cursor: pointer; background: none; border: none; font-family: var(--font-body); white-space: nowrap; }
 .h-nav a:hover, .h-nav button:hover { color: white; background: rgba(255,255,255,0.08); }
-.h-nav a.active { color: var(--orange-light); }
+.h-nav a.is-active { color: var(--orange-light); }
 .h-phone { color: white; text-decoration: none; font-weight: 700; font-size: 15px; padding: 8px 16px; background: var(--orange); border-radius: var(--radius); transition: var(--transition); white-space: nowrap; font-family: var(--font-body); }
 .h-phone:hover { background: var(--orange-light); }
 .h-menu-btn { display: none; background: none; border: none; color: white; cursor: pointer; padding: 8px; font-size: 24px; }
 @media (max-width: 900px) {
   .h-nav { display: none; } .h-phone-desk { display: none; } .h-menu-btn { display: block; }
-  .h-nav.open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--charcoal); padding: 16px 24px 24px; gap: 4px; border-bottom: 3px solid var(--orange); }
-  .h-nav.open a, .h-nav.open button { padding: 12px 16px; font-size: 15px; text-align: left; width: 100%; }
+  .h-nav.is-open { display: flex; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: var(--charcoal); padding: 16px 24px 24px; gap: 4px; border-bottom: 3px solid var(--orange); }
+  .h-nav.is-open a, .h-nav.is-open button { padding: 12px 16px; font-size: 15px; text-align: left; width: 100%; }
+.h-actions { display: flex; align-items: center; gap: 8px; }
 }
 
 /* ── MOBILE BAR ── */
@@ -490,7 +492,7 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .proj-card { cursor: pointer; }
 .proj-imgs { display: grid; grid-template-columns: 1fr 1fr; height: 160px; }
 .proj-img { display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative; }
-.proj-before { background: linear-gradient(135deg, #bbb 0%, #999 100%); }
+.proj-before { background: linear-gradient(135deg, var(--mist) 0%, var(--slate-light) 100%); }
 .proj-after { background: linear-gradient(135deg, var(--steel) 0%, var(--steel-deep) 100%); }
 .proj-label { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.6); color: white; font-size: 9px; padding: 2px 8px; border-radius: 3px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
 .proj-card h3 { font-family: var(--font-display); font-size: 17px; color: var(--charcoal); margin-bottom: 4px; text-transform: uppercase; }
@@ -519,7 +521,7 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .faq-q { width: 100%; text-align: left; padding: 20px 0; background: none; border: none; font-family: var(--font-body); font-size: 15px; font-weight: 600; color: var(--charcoal); cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .faq-q:hover { color: var(--orange); }
 .faq-arrow { font-size: 18px; transition: var(--transition); color: var(--mist); flex-shrink: 0; }
-.faq-arrow.open { transform: rotate(180deg); color: var(--orange); }
+.faq-arrow.is-open { transform: rotate(180deg); color: var(--orange); }
 .faq-a { padding: 0 0 20px; font-size: 14px; line-height: 1.7; color: var(--slate); max-width: 700px; }
 
 /* ── QUOTE FORM ── */
@@ -551,7 +553,7 @@ body { font-family: var(--font-body); color: var(--charcoal); background: var(--
 .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
 .filter-chip { padding: 7px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; border: 1px solid var(--concrete-dark); background: white; color: var(--slate); cursor: pointer; transition: var(--transition); font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; }
 .filter-chip:hover { border-color: var(--steel); color: var(--steel); }
-.filter-chip.active { background: var(--charcoal); color: white; border-color: var(--charcoal); }
+.filter-chip.is-active { background: var(--charcoal); color: white; border-color: var(--charcoal); }
 
 /* ── FOOTER ── */
 .site-footer { background: var(--charcoal); color: rgba(255,255,255,0.6); padding: 64px 24px 32px; font-size: 14px; }
@@ -645,7 +647,7 @@ function FAQ({
     "aria-expanded": open === i,
     onClick: () => setOpen(open === i ? null : i)
   }, f.q, /*#__PURE__*/React.createElement("span", {
-    className: `faq-arrow ${open === i ? "open" : ""}`
+    className: `faq-arrow ${open === i ? "is-open" : ""}`
   }, "\u25BE")), open === i && /*#__PURE__*/React.createElement("div", {
     className: "faq-a"
   }, f.a))));
@@ -1195,11 +1197,11 @@ function GalleryPage() {
   }, /*#__PURE__*/React.createElement("div", {
     className: "filter-bar"
   }, /*#__PURE__*/React.createElement("button", {
-    className: `filter-chip ${filter === "all" ? "active" : ""}`,
+    className: `filter-chip ${filter === "all" ? "is-active" : ""}`,
     onClick: () => setFilter("all")
   }, "All"), opts.map(o => /*#__PURE__*/React.createElement("button", {
     key: o.value,
-    className: `filter-chip ${filter === o.value ? "active" : ""}`,
+    className: `filter-chip ${filter === o.value ? "is-active" : ""}`,
     onClick: () => setFilter(o.value)
   }, o.label))), /*#__PURE__*/React.createElement("div", {
     className: "proj-grid"
@@ -1492,11 +1494,11 @@ function ReviewsPage() {
   }, "5-Star"))), /*#__PURE__*/React.createElement("div", {
     className: "filter-bar"
   }, /*#__PURE__*/React.createElement("button", {
-    className: `filter-chip ${filter === "all" ? "active" : ""}`,
+    className: `filter-chip ${filter === "all" ? "is-active" : ""}`,
     onClick: () => setFilter("all")
   }, "All"), opts.map(o => /*#__PURE__*/React.createElement("button", {
     key: o.value,
-    className: `filter-chip ${filter === o.value ? "active" : ""}`,
+    className: `filter-chip ${filter === o.value ? "is-active" : ""}`,
     onClick: () => setFilter(o.value)
   }, o.label))), /*#__PURE__*/React.createElement("div", {
     className: "grid-2"
@@ -1810,17 +1812,13 @@ function Header({
   }, /*#__PURE__*/React.createElement("span", {
     className: "h-logo-accent"
   }, "Summit"), " Contracting"), /*#__PURE__*/React.createElement("nav", {
-    className: `h-nav ${open ? "open" : ""}`
+    className: `h-nav ${open ? "is-open" : ""}`
   }, links.map(l => /*#__PURE__*/React.createElement("a", {
     key: l.p,
-    className: path.startsWith(l.p) ? "active" : "",
+    className: path.startsWith(l.p) ? "is-active" : "",
     onClick: () => go(l.p)
   }, l.l))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8
-    }
+    className: "h-actions"
   }, /*#__PURE__*/React.createElement("a", {
     href: BIZ.phoneTel,
     className: "h-phone h-phone-desk"
