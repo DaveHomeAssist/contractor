@@ -1,6 +1,4 @@
-> **DEPRECATED** — This file is superseded by `CLAUDE.md`. Issues, session log, and project metadata now live in CLAUDE.md. This file is retained as a historical archive only.
-
-# AGENTS.md
+# CLAUDE.md
 
 Inherits root rules from `/Users/daverobertson/Desktop/Code/AGENTS.md`.
 
@@ -19,6 +17,11 @@ Contractor portfolio and services site. Single page app with a separate JS modul
 - Keep deployment simple with Netlify static hosting
 - Separate app.js for interactivity rather than inline scripts
 - Assets directory for images and media
+
+## Documentation Maintenance
+
+- **Issues**: Track in the issue tracker table below
+- **Session log**: Append to `/Users/daverobertson/Desktop/Code/95-docs-personal/today.csv` after each meaningful change
 
 ## Issue Tracker
 
